@@ -1,12 +1,6 @@
-type TimelineItem = {
-    period: string
-    title: string
-    subtitle: string
-}
-
 type TimelineProps = {
     title: string
-    items: { [key: string]: TimelineItem }
+    items: { [key: string]: TimelineEntry }
     color: 'blue' | 'purple'
 }
 
@@ -73,6 +67,21 @@ export default function Timeline({ title, items, color }: TimelineProps) {
                               text-sm text-almostbright
                               sm:text-base
                             '>{item.subtitle}</p>
+                            {item.points && item.points.length > 0 && (
+                                <ul className='mt-4 flex flex-col gap-2'>
+                                    {item.points.map((point) => (
+                                        <li key={point} className='
+                                          flex gap-2 text-sm text-almostbright
+                                        '>
+                                            <span className={`
+                                              font-mono
+                                              ${colors.text}
+                                            `}>-</span>
+                                            <span>{point}</span>
+                                        </li>
+                                    ))}
+                                </ul>
+                            )}
                         </div>
                     </div>
                 ))}

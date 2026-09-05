@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { SiGithub, SiGitlab } from 'react-icons/si'
+import { SiGithub } from 'react-icons/si'
 import no from '@dictionaries/footer/no.json'
 import en from '@dictionaries/footer/en.json'
 import noPersonal from '@dictionaries/personal/no.json'
@@ -35,12 +35,6 @@ export default async function Footer() {
                             <SiGithub className='
                               size-5 fill-almostbright
                               group-hover:fill-bright
-                            ' />
-                        </Link>
-                        <Link href={textPersonal.links.gitlab} className='group'>
-                            <SiGitlab className='
-                              size-5 fill-almostbright
-                              group-hover:fill-[#FC6D26]
                             ' />
                         </Link>
                         <Link href={textPersonal.links.linkedIn} className='

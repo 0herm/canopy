@@ -9,7 +9,7 @@
 
 <p>
   <b>My personal website.</b><br/>
-  Who I am, the projects I've built, and how to get in touch.
+  Who I am, where I've been, and how to get in touch.
 </p>
 
 <p>
@@ -29,10 +29,9 @@
 ### ✨ Features
 
 - **Get to know me.** A landing page and personal section covering who I am and what I'm into.
-- **See what I've built.** A projects gallery with screenshots, split between my own work and the open-source projects I've contributed to.
-- **Skills at a glance.** The languages, frameworks, and tools I actually work with, laid out plainly.
-- **The path so far.** A timeline of experience and milestones, in order.
-- **Say hi.** A contact section with links to GitHub, GitLab, LinkedIn, and email.
+- **The path so far.** A timeline of work and education, with the highlights of each role.
+- **What I work with.** A technical-skills overview, straight from my CV.
+- **Say hi.** A contact section with links to GitHub, LinkedIn, and email.
 - **Pick your language.** The whole site is bilingual, English and Norwegian, with a one-tap toggle.
 - **Light or dark.** A theme toggle for whichever you prefer.
 - **Fast and self-hosted.** Built with Next.js, cached behind Varnish, and shipped as a Docker container on my own server.

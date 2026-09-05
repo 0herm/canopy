@@ -1,5 +1,12 @@
 type Lang = 'en' | 'no'
 
+type TimelineEntry = {
+    title: string
+    subtitle: string
+    period: string
+    points?: string[]
+}
+
 type LandingPageDictionary = {
     title: string
     description: string
@@ -7,39 +14,22 @@ type LandingPageDictionary = {
     education: {
         title: string
         degrees: {
-            [key: string]: {
-                title: string
-                subtitle: string
-                period: string
-            }
+            [key: string]: TimelineEntry
         }
     }
     work: {
         title: string
         jobs: {
-            [key: string]: {
-                title: string
-                subtitle: string
-                period: string
-            }
+            [key: string]: TimelineEntry
         }
     }
-}
-
-type NavBarDictionary = {
-    menu: string
-    links: {
-        about: {
-            title: string
-            navigation: string
-        }
-        projects: {
-            title: string
-            navigation: string
-        }
-        skills: {
-            title: string
-            navigation: string
+    skills: {
+        title: string
+        categories: {
+            [key: string]: {
+                title: string
+                items: string[]
+            }
         }
     }
 }
@@ -59,50 +49,4 @@ type ContactDictionary = {
 
 type FooterDictionary = {
     copyright: string
-}
-
-type ProjectsDictionary = {
-    projects: {
-        title: string
-        disclaimer: string
-        viewProject: string
-        viewMore: string
-        projects: {
-            [key: string]: {
-                name: string
-                description: string
-                link?: string
-                images?: string[]
-            }
-        }
-    }
-    contributions: {
-        title: string
-        viewProject: string
-        viewMore: string
-        contributions: {
-            [key: string]: {
-                name: string
-                description: string
-                link?: string
-            }
-        }
-    }
-}
-
-
-type SkillsDictionary = {
-    title: string
-    disclaimer: string
-    categories: {
-        [key: string]: SkillCategory
-    }
-}
-
-type SkillCategory = {
-    title: string
-    categories: Array<{
-        title: string
-        items: string[]
-    }>
 }

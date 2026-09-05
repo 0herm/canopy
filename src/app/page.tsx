@@ -1,21 +1,18 @@
 import Link from 'next/link'
-import { SiGithub, SiGitlab } from 'react-icons/si'
+import { SiGithub } from 'react-icons/si'
 import no from '@dictionaries/landing/no.json'
 import en from '@dictionaries/landing/en.json'
-import noProjects from '@dictionaries/projects/no.json'
-import enProjects from '@dictionaries/projects/en.json'
 import noPersonal from '@dictionaries/personal/no.json'
 import enPersonal from '@dictionaries/personal/en.json'
 import { cookies } from 'next/headers'
 import { Briefcase } from 'lucide-react'
 import Contact from '@components/contact/contact'
-import ProjectSection from '@components/section/projectsection'
 import Timeline from '@components/timeline/timeline'
+import Skills from '@components/section/skills'
 
 export default async function Home() {
     const lang = (await cookies()).get('lang')?.value || 'no'
     const text : LandingPageDictionary = lang === 'no' ? no : en
-    const textProjects : ProjectsDictionary = lang === 'no' ? noProjects : enProjects
     const textPersonal = lang === 'no' ? noPersonal : enPersonal
 
     return (
@@ -40,13 +37,6 @@ export default async function Home() {
                         <SiGithub className='
                           size-5 fill-almostbright
                           group-hover:fill-bright
-                        ' />
-                    </Link>
-
-                    <Link href={textPersonal.links.gitlab} className='group'>
-                        <SiGitlab className='
-                          size-5 fill-almostbright
-                          group-hover:fill-[#FC6D26]
                         ' />
                     </Link>
 
@@ -86,8 +76,7 @@ export default async function Home() {
                 </div>
             </div>
 
-            <ProjectSection text={textProjects} type='personal' />
-            <ProjectSection text={textProjects} type='contribution' />
+            <Skills text={text.skills} />
 
             <div className='flex w-full justify-center'>
                 <div className='
