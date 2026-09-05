@@ -2,72 +2,131 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
-@theme {
-    --color-darker: red;
-    --color-dark: red;
-    --color-normal: red;
-    --color-light: red;
-    --color-extralight: red;
-    --color-superlight: red;
-    --color-almostbright: red;
-    --color-softbright: red;
-    --color-bright: red;
+@theme inline {
+    --font-sans: var(--font-plex-sans), ui-sans-serif, system-ui, sans-serif;
+    --font-display: var(--font-plex-condensed), var(--font-plex-sans), ui-sans-serif, sans-serif;
+    --font-mono: var(--font-plex-mono), ui-monospace, monospace;
+
+    --color-ink: var(--ink);
+    --color-surface: var(--surface);
+    --color-raised: var(--raised);
+    --color-line: var(--line);
+    --color-line-strong: var(--line-strong);
+    --color-fg: var(--fg);
+    --color-muted: var(--muted);
+    --color-faint: var(--faint);
+    --color-signal: var(--signal);
+    --color-signal-soft: var(--signal-soft);
+    --color-on-signal: var(--on-signal);
+    --color-signal-fill: var(--signal-fill);
+    --color-on-fill: var(--on-fill);
 }
 
+:root,
 .dark {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-    --color-darker: #121212;
-    --color-dark: #171717;
-    --color-normal: #1a1a1a;
-    --color-light: #212121;
-    --color-extralight: #323232;
-    --color-superlight: #424242;
-    --color-almostbright: #6b6b6b;
-    --color-softbright: #b1b1b1;
-    --color-bright: white;
+    --ink: #0c1116;
+    --surface: #121a21;
+    --raised: #18222b;
+    --line: #24303a;
+    --line-strong: #33434f;
+    --fg: #e4eaf0;
+    --muted: #97a6b3;
+    --faint: #7e8d9a;
+    --signal: #e0a458;
+    --signal-soft: #e0a4581f;
+    --on-signal: #0c1116;
+    --signal-fill: #e0a458;
+    --on-fill: #171006;
+    color-scheme: dark;
 }
 
 .light {
-    --background: #ffffff;
-    --foreground: #171717;
-    --color-darker: #fcfcfc;
-    --color-dark: #f9f9f9;
-    --color-normal: #f1f1f1;
-    --color-light: #dcdcdc;
-    --color-extralight: #848484;
-    --color-superlight: #525252;
-    --color-almostbright: #444444;
-    --color-softbright: #303030;
-    --color-bright: black;
+    --ink: #dfe5ea;
+    --surface: #ffffff;
+    --raised: #f6f8fa;
+    --line: #dde3e8;
+    --line-strong: #c2ccd4;
+    --fg: #0e1519;
+    --muted: #56666f;
+    --faint: #64737e;
+    --signal: #8a5210;
+    --signal-soft: #8a521014;
+    --on-signal: #ffffff;
+    --signal-fill: #e0a458;
+    --on-fill: #171006;
+    color-scheme: light;
 }
 
-@keyframes blink {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0; }
-}
+@layer base {
+    html {
+        scroll-behavior: smooth;
+        scroll-padding-top: 6.5rem;
 
-.animate-cursor {
-    animation: blink 1s step-end infinite;
-}
+        --sheet-half: 36rem;
+        background-color: var(--ink);
+        background-image: linear-gradient(to right,
+            var(--ink) calc(50% - var(--sheet-half)),
+            var(--line) calc(50% - var(--sheet-half)),
+            var(--line) calc(50% - var(--sheet-half) + 1px),
+            var(--surface) calc(50% - var(--sheet-half) + 1px),
+            var(--surface) calc(50% + var(--sheet-half) - 1px),
+            var(--line) calc(50% + var(--sheet-half) - 1px),
+            var(--line) calc(50% + var(--sheet-half)),
+            var(--ink) calc(50% + var(--sheet-half))
+        );
+        background-size: 100% 100px;
+        background-repeat: repeat-y;
+        background-position: center top;
+    }
 
+    body {
+        color: var(--fg);
+        font-synthesis-weight: none;
+        text-rendering: optimizeLegibility;
+    }
 
-@layer base { 
-    /* Performance issue phone? */
-    @media (min-width: 500px) {
-        * {
-            @apply transition-all duration-150;
-        }
+    .tabular {
+        font-variant-numeric: tabular-nums;
+    }
+
+    :focus-visible {
+        outline: 2px solid var(--signal);
+        outline-offset: 2px;
+        border-radius: 2px;
+    }
+
+    ::selection {
+        background: var(--signal);
+        color: var(--on-signal);
     }
 }
 
-body {
-    color: var(--foreground);
-    background: var(--color-dark);
+@keyframes rise {
+    from {
+        opacity: 0;
+        transform: translateY(14px);
+    }
 }
 
-@keyframes jump {
-    40% {
-        transform: translateY(-.3rem);
+.hero-reveal > * {
+    animation: rise 0.7s cubic-bezier(0.22, 0.61, 0.36, 1) backwards;
+}
+
+.hero-reveal > :nth-child(2) { animation-delay: 0.08s; }
+.hero-reveal > :nth-child(3) { animation-delay: 0.18s; }
+.hero-reveal > :nth-child(4) { animation-delay: 0.26s; }
+.hero-reveal > :nth-child(5) { animation-delay: 0.34s; }
+
+@media (prefers-reduced-motion: reduce) {
+    html {
+        scroll-behavior: auto;
+    }
+
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
     }
 }

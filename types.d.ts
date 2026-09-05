@@ -10,7 +10,14 @@ type TimelineEntry = {
 type LandingPageDictionary = {
     title: string
     description: string
-    experience: string
+    ui: {
+        contact: string
+        skip: string
+        github: string
+        linkedIn: string
+        toggleTheme: string
+        toggleLanguage: string
+    }
     education: {
         title: string
         degrees: {

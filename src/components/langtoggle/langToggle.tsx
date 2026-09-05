@@ -1,41 +1,37 @@
 'use client'
 
-import { useEffect, useState } from 'react'
-import { getCookie, setCookie } from '@utils/cookies'
+import { useState } from 'react'
+import { setCookie } from '@utils/cookies'
 import { useRouter } from 'next/navigation'
-import { Globe } from 'lucide-react'
 
-export default function LangToggle() {
+type LangToggleProps = {
+    initial: Lang
+    label: string
+}
+
+export default function LangToggle({ initial, label }: LangToggleProps) {
     const router = useRouter()
-    
-    const [lang, setLang] = useState<Lang>('no')
-    const [jump, setJump] = useState(false)
-
-    useEffect(() => {
-        const savedLang = getCookie('lang') as Lang
-        if (savedLang) {
-            setLang(savedLang)
-        }
-    }, [])
+    const [lang, setLang] = useState<Lang>(initial)
 
     function handleClick() {
-        const newLang = lang === 'no' ? 'en' : 'no'
-        setCookie('lang', newLang)
-        setLang(newLang)
-        setJump(true)
-        setTimeout(() => setJump(false), 400)
+        const next: Lang = lang === 'no' ? 'en' : 'no'
+        setCookie('lang', next, 365)
+        setLang(next)
         router.refresh()
     }
 
-    return(
-        <button value={lang} onClick={handleClick} className='
-          group cursor-pointer
-        '>
-            <Globe className={`
-              size-7
-              group-hover:stroke-softbright
-              ${jump ? 'animate-[jump_0.4s_1]' : ''}
-            `}/>
+    return (
+        <button
+            type='button'
+            onClick={handleClick}
+            aria-label={label}
+            className='
+              flex h-8 cursor-pointer items-center justify-center rounded-md
+              px-2 font-mono text-xs text-muted transition-colors duration-150
+              hover:bg-raised hover:text-fg
+            '
+        >
+            {lang.toUpperCase()}
         </button>
     )
 }

@@ -1,91 +1,64 @@
+import { isOngoing } from '@utils/period'
+
 type TimelineProps = {
-    title: string
     items: { [key: string]: TimelineEntry }
-    color: 'blue' | 'purple'
 }
 
-const colorClasses = {
-    blue: {
-        line: 'border-blue-500/30',
-        dot: 'text-blue-500',
-        text: 'text-blue-400',
-        border: 'hover:border-blue-500'
-    },
-    purple: {
-        line: 'border-purple-500/30',
-        dot: 'text-purple-500',
-        text: 'text-purple-400',
-        border: 'hover:border-purple-500'
-    }
-}
-
-export default function Timeline({ title, items, color }: TimelineProps) {
-    const colors = colorClasses[color]
-
+export default function Timeline({ items }: TimelineProps) {
     return (
-        <div>
-            <h3 className='
-              mb-8 flex items-center gap-2 text-lg font-semibold
-              sm:text-xl
-            '>
-                <span className={`
-                  ${colors.text}
-                `}>&gt;</span>
-                {title}
-                <div className={`
-                  h-px flex-1 border-b border-dashed
-                  ${colors.line}
-                  opacity-30
-                `}></div>
-            </h3>
-            <div className='relative'>
-                <div className={`
-                  absolute inset-y-0 left-[1.35rem] w-px border-l border-dashed
-                  ${colors.line}
-                `}></div>
-                {Object.entries(items).map(([key, item]) => (
-                    <div key={key} className='group relative pb-10 pl-12'>
-                        <div className={`
-                          absolute left-[0.35rem] w-8 text-center font-mono
-                          ${colors.dot}
-                          z-10 rounded-full bg-dark text-nowrap
-                        `}>[+]</div>
-                        <div className={`
-                          border border-extralight bg-dark p-6
-                          ${colors.border}
-                          rounded-xl shadow-none transition-none
+        <ol className='flex flex-col'>
+            {Object.entries(items).map(([key, item]) => {
+                const ongoing = isOngoing(item.period)
+
+                return (
+                    <li key={key} className='
+                      grid gap-x-8 gap-y-2 border-t border-line py-7
+                      first:border-t-0 first:pt-0
+                      last:pb-0
+                      sm:grid-cols-[10.5rem_minmax(0,1fr)]
+                    '>
+                        <p className={`
+                          tabular flex items-center gap-2 self-start pt-1
+                          font-mono text-xs leading-5
+                          ${ongoing ? 'text-signal' : 'text-faint'}
                         `}>
-                            <span className={`
-                              font-mono text-xs
-                              ${colors.text}
-                              tracking-wider uppercase
-                            `}>
-                                [{item.period}]
-                            </span>
-                            <h4 className='mt-2 mb-1 text-lg font-semibold'>{item.title}</h4>
-                            <p className='
-                              text-sm text-almostbright
-                              sm:text-base
-                            '>{item.subtitle}</p>
+                            {ongoing && (
+                                <span className='
+                                  size-1.5 shrink-0 rounded-full bg-signal
+                                ' aria-hidden='true' />
+                            )}
+                            {item.period}
+                        </p>
+
+                        <div>
+                            <h3 className='
+                              font-display text-lg font-semibold
+                              tracking-tight
+                              sm:text-xl
+                            '>{item.title}</h3>
+
+                            <p className='mt-1 text-sm text-muted'>{item.subtitle}</p>
+
                             {item.points && item.points.length > 0 && (
-                                <ul className='mt-4 flex flex-col gap-2'>
+                                <ul className='mt-4 flex flex-col gap-2.5'>
                                     {item.points.map((point) => (
                                         <li key={point} className='
-                                          flex gap-2 text-sm text-almostbright
+                                          flex gap-3 text-[0.9375rem]
+                                          leading-relaxed text-muted
                                         '>
-                                            <span className={`
-                                              font-mono
-                                              ${colors.text}
-                                            `}>-</span>
-                                            <span>{point}</span>
+                                            <span className='
+                                              mt-[0.65em] h-px w-2.5 shrink-0
+                                              bg-line-strong
+                                            ' aria-hidden='true' />
+                                            <span className='max-w-[70ch]'>{point}</span>
                                         </li>
                                     ))}
                                 </ul>
                             )}
                         </div>
-                    </div>
-                ))}
-            </div>
-        </div>
+                    </li>
+                )
+            })}
+        </ol>
     )
 }

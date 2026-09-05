@@ -1,169 +1,116 @@
 'use client'
-import React, { useState } from 'react'
-import en from '@dictionaries/contact/en.json'
-import no from '@dictionaries/contact/no.json'
-import enPersonal from '@dictionaries/personal/en.json'
-import Link from 'next/link'
+import { useState } from 'react'
 import { Send } from 'lucide-react'
 
-export default function Contact() {
-    // client-side cookie helper
-    const getCookie = (name: string): string | undefined => {
-        if (typeof document === 'undefined') return undefined
-        const match = document.cookie.split('; ').find((row) => row.startsWith(name + '='))
-        return match ? decodeURIComponent(match.split('=')[1]) : undefined
-    }
+type ContactProps = {
+    text: ContactDictionary
+    mail: string
+}
 
-    const lang = getCookie('lang') || 'no'
-    const text = lang === 'no' ? no : en
+const field = `
+  w-full rounded-md border border-line bg-raised px-3 py-2.5 text-sm
+  text-fg transition-colors duration-150 placeholder:text-faint
+  hover:border-line-strong
+  focus:border-signal focus:outline-none
+`
 
-    // form state (client-side)
+const label = 'mb-2 block text-sm font-medium text-fg'
+
+export default function Contact({ text, mail }: ContactProps) {
     const [name, setName] = useState('')
     const [email, setEmail] = useState('')
     const [subject, setSubject] = useState('')
     const [message, setMessage] = useState('')
 
-    const isValid = Boolean(name.trim() && email.trim() && subject.trim() && message.trim())
-
-    const mailtoUrl = isValid
-        ? `mailto:${enPersonal.mail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(`${name} <${email}>\n\n${message}`)}`
-        : '#'
+    function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+        event.preventDefault()
+        const body = `${name} <${email}>\n\n${message}`
+        window.location.href = `mailto:${mail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`
+    }
 
     return (
-        <>
-            <h2 className='
-              mb-8 flex items-center gap-3 text-xl font-bold
-              sm:text-2xl
-              md:text-3xl
-            '>
-                <span className='font-mono text-3xl text-blue-500'>&gt;</span>
-                <span className='wrap-break-word'>{text.title}</span>
-            </h2>
-
-            {/* client-side form (no server action) */}
+        <form onSubmit={handleSubmit} className='flex max-w-160 flex-col gap-6'>
             <div className='
-              w-full space-y-6
-              md:space-y-8
+              grid grid-cols-1 gap-6
+              sm:grid-cols-2
             '>
-                <div className='
-                  grid grid-cols-1 gap-6
-                  md:grid-cols-2
-                '>
-                    <div>
-                        <label className='
-                          mb-2 block font-mono text-sm text-almostbright
-                          sm:text-base
-                        '>$ {text.name}:</label>
-                        <input
-                            placeholder='_'
-                            type='text'
-                            name='name'
-                            required
-                            value={name}
-                            onChange={(e) => setName(e.target.value)}
-                            className='
-                              w-full rounded-lg border border-extralight bg-dark
-                              p-2.5 font-mono transition-colors
-                              focus:border-bright focus:outline-none
-                              sm:p-3
-                            '
-                        />
-                    </div>
-
-                    <div>
-                        <label className='
-                          mb-2 block font-mono text-sm text-almostbright
-                          sm:text-base
-                        '>$ {text.email}:</label>
-                        <input
-                            placeholder='_'
-                            type='email'
-                            name='email'
-                            required
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            className='
-                              w-full rounded-lg border border-extralight bg-dark
-                              p-2.5 font-mono transition-colors
-                              focus:border-bright focus:outline-none
-                              sm:p-3
-                            '
-                        />
-                    </div>
-                </div>
-
                 <div>
-                    <label className='
-                      mb-2 block font-mono text-sm text-almostbright
-                      sm:text-base
-                    '>$ {text.subject}:</label>
+                    <label htmlFor='contact-name' className={label}>{text.name}</label>
                     <input
-                        placeholder='_'
+                        id='contact-name'
+                        name='name'
                         type='text'
-                        name='subject'
                         required
-                        value={subject}
-                        onChange={(e) => setSubject(e.target.value)}
-                        className='
-                          w-full rounded-lg border border-extralight bg-dark
-                          p-2.5 font-mono transition-colors
-                          focus:border-bright focus:outline-none
-                          sm:p-3
-                        '
+                        autoComplete='name'
+                        placeholder={text.namePlaceholder}
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                        className={field}
                     />
                 </div>
 
                 <div>
-                    <label className='
-                      mb-2 block font-mono text-sm text-almostbright
-                      sm:text-base
-                    '>$ {text.message}:</label>
-                    <textarea
-                        placeholder='_'
-                        name='message'
+                    <label htmlFor='contact-email' className={label}>{text.email}</label>
+                    <input
+                        id='contact-email'
+                        name='email'
+                        type='email'
                         required
-                        rows={6}
-                        value={message}
-                        onChange={(e) => setMessage(e.target.value)}
-                        className='
-                          w-full resize-y rounded-lg border border-extralight
-                          bg-dark p-2.5 font-mono transition-colors
-                          focus:border-bright focus:outline-none
-                          sm:p-3
-                        '
+                        autoComplete='email'
+                        placeholder={text.emailPlaceholder}
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        className={field}
                     />
-                </div>
-
-                <div className='flex justify-center pt-2'>
-                    {isValid ? (
-                        <Link href={mailtoUrl} className='
-                          group inline-flex w-full items-center justify-center
-                          gap-2 rounded-lg border border-bright px-5 py-2.5
-                          font-mono text-bright uppercase transition-colors
-                          hover:bg-bright hover:text-darker
-                          sm:w-auto sm:px-6 sm:py-3
-                        '>
-                            [ {text.submit} ]
-                            <Send className='size-4' />
-                        </Link>
-                    ) : (
-                        <button
-                            type='button'
-                            disabled
-                            className='
-                              group inline-flex w-full cursor-not-allowed
-                              items-center justify-center gap-2 rounded-lg
-                              border border-extralight px-5 py-2.5 font-mono
-                              text-almostbright uppercase opacity-50
-                              sm:w-auto sm:px-6 sm:py-3
-                            '
-                        >
-                            [ {text.submit} ]
-                            <Send className='size-4' />
-                        </button>
-                    )}
                 </div>
             </div>
-        </>
+
+            <div>
+                <label htmlFor='contact-subject' className={label}>{text.subject}</label>
+                <input
+                    id='contact-subject'
+                    name='subject'
+                    type='text'
+                    required
+                    placeholder={text.subjectPlaceholder}
+                    value={subject}
+                    onChange={(e) => setSubject(e.target.value)}
+                    className={field}
+                />
+            </div>
+
+            <div>
+                <label htmlFor='contact-message' className={label}>{text.message}</label>
+                <textarea
+                    id='contact-message'
+                    name='message'
+                    required
+                    rows={6}
+                    placeholder={text.messagePlaceholder}
+                    value={message}
+                    onChange={(e) => setMessage(e.target.value)}
+                    className={`
+                      ${field}
+                      resize-y
+                    `}
+                />
+            </div>
+
+            <div>
+                <button
+                    type='submit'
+                    className='
+                      inline-flex w-full items-center justify-center gap-2
+                      rounded-md bg-signal-fill px-5 py-2.5 text-sm font-medium
+                      text-on-fill transition-opacity duration-150
+                      hover:opacity-85
+                      sm:w-auto
+                    '
+                >
+                    {text.submit}
+                    <Send className='size-4' />
+                </button>
+            </div>
+        </form>
     )
 }
