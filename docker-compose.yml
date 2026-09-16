@@ -1,6 +1,6 @@
 services:
-  workbee:
-    container_name: workbee
+  canopy:
+    container_name: canopy
     build: .
     restart: always
     ports:
